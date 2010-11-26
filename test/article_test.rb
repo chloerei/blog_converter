@@ -9,7 +9,7 @@ class ArticleTest < Test::Unit::TestCase
     a = BlogConverter::Article.new
     assert_not_nil a
 
-    params = {:title => 'title', :content => 'content', :summary => 'summary', :published_at => Time.now, :created_at => Time.now, :updated_at => Time.now, :author => 'Rei'}
+    params = {:title => 'title', :content => 'content', :summary => 'summary', :published_at => Time.now, :created_at => Time.now, :author => 'Rei', :categories => ["live"], :tags => ["tag1", "tag2"]}
     a = BlogConverter::Article.new params
     params.each do |key, value|
       assert_equal value, a.send(key)
