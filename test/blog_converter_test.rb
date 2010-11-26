@@ -1,5 +1,4 @@
-require 'test/unit'
-require 'blog_converter'
+require './test/helper'
 
 class BlogConverterTest < Test::Unit::TestCase
   def test_init

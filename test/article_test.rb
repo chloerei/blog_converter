@@ -1,5 +1,4 @@
-require 'test/unit'
-require 'blog_converter'
+require './test/helper'
 
 class ArticleTest < Test::Unit::TestCase
   def setup

@@ -1,5 +1,4 @@
-require 'test/unit'
-require 'blog_converter'
+require './test/helper'
 
 class CommentTest < Test::Unit::TestCase
   def setup
