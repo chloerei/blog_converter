@@ -44,6 +44,7 @@
             <category><![CDATA[Uncategorized]]></category>
 
             <category domain="category" nicename="uncategorized"><![CDATA[Uncategorized]]></category>
+            <category domain="tag" nicename="xmpp"><![CDATA[XMPP]]></category>
 
             <guid isPermaLink="false"></guid>
             <description></description>
@@ -65,11 +66,11 @@
                 <wp:comment_id>1</wp:comment_id>
                 <wp:comment_author><![CDATA[Mr WordPress]]></wp:comment_author>
                 <wp:comment_author_email></wp:comment_author_email>
-                <wp:comment_author_url>http://blog.chloerei.com/</wp:comment_author_url>
+                <wp:comment_author_url>http://test.domain/</wp:comment_author_url>
                 <wp:comment_author_IP>127.0.0.1</wp:comment_author_IP>
                 <wp:comment_date>2010-03-25 07:36:11</wp:comment_date>
                 <wp:comment_date_gmt>2010-03-25 07:36:11</wp:comment_date_gmt>
-                <wp:comment_content><![CDATA[This is an example of a WordPress comment, you could edit this to put information about yourself or your site so readers know where you are coming from. You can create as many comments like this one or sub-comments as you like and manage all of your content inside of WordPress.]]></wp:comment_content>
+                <wp:comment_content><![CDATA[This is an example of a WordPress comment]]></wp:comment_content>
                 <wp:comment_approved>1</wp:comment_approved>
                 <wp:comment_type></wp:comment_type>
                 <wp:comment_parent>0</wp:comment_parent>

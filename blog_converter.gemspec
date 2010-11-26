@@ -1,5 +1,5 @@
 require 'rubygems'
-include_files = ["README*", "Rakefile", "{lib, test}/**/*"].map{|glob| Dir[glob]}.flatten
+include_files = ["README*", "Rakefile", "{lib,test}/**/*"].map{|glob| Dir[glob]}.flatten
 
 Gem::Specification.new do |s|
   s.name    = "blog_converter"

@@ -2,7 +2,7 @@ require './test/helper'
 
 class CommentTest < Test::Unit::TestCase
   def setup
-    @params = {:name => 'name', :email => 'email', :url => 'url', :content => 'content', :created_at => Time.now}
+    @params = {:author => 'name', :email => 'email', :url => 'url', :content => 'content', :created_at => Time.now}
     @comment = BlogConverter::Comment.new @params
   end
 
