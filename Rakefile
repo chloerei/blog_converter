@@ -7,6 +7,13 @@ require 'blog_converter'
 desc 'Default: run unit tests.'
 task :default => [:test]
 
+namespace :gem do
+  desc 'Build gem'
+  task :build => :clean do
+    system "gem build blog_converter.gemspec"
+  end
+end
+
 desc 'Test the paperclip plugin.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
