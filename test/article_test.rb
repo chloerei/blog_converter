@@ -1,7 +1,11 @@
 require 'test/unit'
-require 'blog_converter/article'
+require 'blog_converter'
 
 class ArticleTest < Test::Unit::TestCase
+  def setup
+    @article = BlogConverter::Article.new 
+  end
+
   def test_init
     a = BlogConverter::Article.new
     assert_not_nil a
@@ -11,5 +15,12 @@ class ArticleTest < Test::Unit::TestCase
     params.each do |key, value|
       assert_equal value, a.send(key)
     end
+  end
+
+  def test_comments
+    assert @article.comments.empty?
+    cm = BlogConverter::Comment.new
+    @article.comments << cm
+    assert_equal 1, @article.comments.count
   end
 end
