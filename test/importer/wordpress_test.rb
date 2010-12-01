@@ -4,8 +4,7 @@ class ImporterWordpressTest < Test::Unit::TestCase
   def test_import
     @wordpress_xml = File.open('./test/fixtures/wordpress.xml').read
 
-    importer = BlogConverter::Importer::Wordpress.new
-    doc = importer.import @wordpress_xml
+    doc = BlogConverter::Importer::Wordpress.import @wordpress_xml
     assert_equal BlogConverter::Document, doc.class
 
     assert_equal 1, doc.articles.count

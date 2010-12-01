@@ -2,16 +2,9 @@ module BlogConverter
   module Importer
     class Wordpress
       def self.import(xml)
-        self.new.import(xml)
-      end
-
-      def initialize
-        @doc = Document.new
-      end
-
-      def import(xml)
-        @xml_doc = Nokogiri::XML(xml)
-        @xml_doc.css('rss > channel > item').each do |item|
+        doc = Document.new
+        xml_doc = Nokogiri::XML(xml)
+        xml_doc.css('rss > channel > item').each do |item|
           if item.xpath('wp:post_type').text == 'post'
             article = Article.new(:title        => item.xpath('title').text,
                                   :author       => item.xpath('dc:creator').text,
@@ -37,10 +30,10 @@ module BlogConverter
               article.comments << comment
             end
 
-            @doc.articles << article
+            doc.articles << article
           end
         end
-        @doc
+        doc
       end
     end
   end

@@ -8,10 +8,6 @@ module BlogConverter
                       'xmlns:dc' => "http://purl.org/dc/elements/1.1/",
                       'xmlns:wp' => "http://wordpress.org/export/1.0/"}
       def self.export(doc)
-        self.new.export doc
-      end
-
-      def export(doc)
         builder = Nokogiri::XML::Builder.new do |xml|
           xml.rss(RSS_ATTRIBUTES) do
             doc.articles.each do |article|

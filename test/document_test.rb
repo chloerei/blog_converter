@@ -6,6 +6,6 @@ class DocumentTest < Test::Unit::TestCase
     assert_not_nil doc
     assert_respond_to doc, :articles
     assert_equal 0, doc.articles.count
-    assert_respond_to doc, :type
+    assert_respond_to BlogConverter::Document, :parse
   end
 end
