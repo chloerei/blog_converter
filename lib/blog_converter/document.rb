@@ -58,6 +58,7 @@ module BlogConverter
                     xml.url        comment.url
                     xml.content    comment.content
                     xml.created_at comment.created_at
+                    xml.ip         comment.ip
                   end
                 end
               end
