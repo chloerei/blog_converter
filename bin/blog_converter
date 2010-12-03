@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
+
+require 'blog_converter'
+require 'blog_converter/exec'
+
+converter = BlogConverter::Exec.new ARGV
+converter.run
