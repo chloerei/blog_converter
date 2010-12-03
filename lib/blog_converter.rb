@@ -6,6 +6,7 @@ require 'blog_converter/document'
 require 'blog_converter/importer/wordpress'
 require 'blog_converter/importer/blogbus'
 require 'blog_converter/exporter/wordpress'
+require 'blog_converter/exporter/blogbus'
 
 module BlogConverter
 
