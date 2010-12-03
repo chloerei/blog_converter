@@ -22,11 +22,12 @@ module BlogConverter
             end
 
             item.xpath("wp:comment").each do |comment_item|
-              comment = Comment.new(:author     => comment_item.xpath('wp:comment_author').text,
+              comment = Comment.new :author     => comment_item.xpath('wp:comment_author').text,
                                     :email      => comment_item.xpath('wp:comment_author_email').text,
                                     :url        => comment_item.xpath('wp:comment_author_url').text,
                                     :content    => comment_item.xpath('wp:comment_content').text,
-                                    :created_at => Time.parse(comment_item.xpath('wp:comment_date').text) )
+                                    :created_at => Time.parse(comment_item.xpath('wp:comment_date').text),
+                                    :ip         => comment_item.xpath('wp:comment_author_IP').text
               article.comments << comment
             end
 

@@ -31,11 +31,12 @@ module BlogConverter
 
                   article.comments.each do |comment|
                     xml['wp'].comment do
-                      xml['wp'].comment_author   comment.author
-                      xml['wp'].comment_email    comment.email
-                      xml['wp'].comment_url      comment.url
-                      xml['wp'].comment_content  comment.content
-                      xml['wp'].comment_date     comment.created_at
+                      xml['wp'].comment_author      comment.author
+                      xml['wp'].comment_email       comment.email
+                      xml['wp'].comment_url         comment.url
+                      xml['wp'].comment_content     comment.content
+                      xml['wp'].comment_date        comment.created_at
+                      xml['wp'].comment_author_IP   comment.ip
                       xml['wp'].comment_approved 1
                     end
                   end

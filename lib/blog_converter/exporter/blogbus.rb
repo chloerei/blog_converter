@@ -26,6 +26,7 @@ module BlogConverter
 											xml.NiceName    comment.author
 											xml.CommentText comment.content
 											xml.CreateTime  comment.created_at
+											xml.CommentIp   comment.ip
 										end
 									end
 								end

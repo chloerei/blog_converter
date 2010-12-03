@@ -17,7 +17,8 @@ module BlogConverter
                                   :email      => comment.xpath('Email').text,
                                   :url        => comment.xpath('HomePage').text,
                                   :content    => comment.xpath('CommentText').text,
-                                  :created_at => Time.parse(comment.xpath('CreateTime').text)
+                                  :created_at => Time.parse(comment.xpath('CreateTime').text),
+                                  :ip         => comment.xpath('CommentIp')
             article.comments << comment
           end
 
