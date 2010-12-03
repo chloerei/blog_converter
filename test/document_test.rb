@@ -15,8 +15,8 @@ class DocumentTest < Test::Unit::TestCase
   end
 
   def test_export_as_xml
-    doc = BlogConverter::Document.parse @wordpress_xml
-    puts doc.to_xml
+    doc = BlogConverter::Document.parse @blogbus_xml
+    assert_respond_to doc, :to_xml
   end
 
   def test_check_type

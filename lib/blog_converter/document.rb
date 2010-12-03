@@ -18,7 +18,7 @@ module BlogConverter
 
     def to_xml
       builder = Nokogiri::XML::Builder.new do |xml|
-        xml.blog_converter_document do 
+        xml.document do 
           self.articles.each do |article|
             xml.article do
               xml.author       article.author
