@@ -1,16 +1,29 @@
 module BlogConverter
   class Document
+    module Type
+      Wordpress = :wordpress
+      Blogbus   = :blogbus
+    end
+
     attr_accessor :articles
     def initialize
       @articles = []
     end
 
-    def export(format = :xml)
-      case format
-      when :xml
-        to_xml
-      when Type::Wordpress
-        Exporter::Wordpress.export self
+    def export(exporter = :xml)
+      if exporter.is_a? Symbol
+        case exporter
+        when :xml
+          to_xml
+        when Type::Wordpress
+          Exporter::Wordpress.export self
+        when Type::Blogbus
+          Exporter::Blogbus.export self
+        else
+          nil
+        end
+      elsif exporter.respond_to? :export
+        exporter.export self
       else
         nil
       end
@@ -53,11 +66,6 @@ module BlogConverter
         end
       end
       builder.to_xml
-    end
-
-    module Type
-      Wordpress = :wordpress
-      Blogbus   = :blogbus
     end
 
     def self.parse(string, importer = nil)
