@@ -10,26 +10,28 @@ module BlogConverter
     end
 
     def self.parse(string)
-      doc = nil
       case check_type(string)
       when Type::Wordpress
-        doc = Importer::Wordpress.import string
+        Importer::Wordpress.import string
       else
-        puts "Unknow Documnet Type"
+        nil
       end
-      doc
     end
 
     private
 
     def self.check_type(string)
-      type = nil
+      if is_wordpress?(string)
+        Type::Wordpress
+      else
+        nil
+      end
+    end
+
+    def self.is_wordpress?(string)
       xml_doc = Nokogiri::XML(string)
       gen = xml_doc.css('rss > channel > generator').first
-      if gen and gen.text =~ /http:\/\/wordpress.org*/
-        type = Type::Wordpress
-      end
-      type
+      gen and gen.text =~ /http:\/\/wordpress.org*/
     end
   end
 end
