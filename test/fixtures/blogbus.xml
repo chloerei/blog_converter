@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<BlogBusCom dtype="BlogData" SchemaVersion="1.1" Creator="BlogBus.Com BlogSystem V4.0">
+    <Description>
+        <BlogName>test</BlogName>
+        <DomainName>reitest.blogbus.com</DomainName>
+        <ExportTime>2010-12-03 17:11:55</ExportTime>
+    </Description>
+    <Log>
+        <Title>title</Title>
+        <Status>1</Status>
+        <AllowComment>1</AllowComment>
+        <AllowTrackback>1</AllowTrackback>
+        <AllowAutoLink>1</AllowAutoLink>
+        <Writer></Writer>
+        <Sort>category</Sort>
+        <AccessPassword></AccessPassword>
+        <Content><![CDATA[<p>test content</p>]]></Content>
+        <Excerpt><![CDATA[<p>test content</p>]]></Excerpt>
+        <Tags>tag tag2</Tags>
+        <LogDate>2010-12-03 17:03:00</LogDate>
+        <Comments>
+            <Comment>
+                <Email>test@test.domain</Email>
+                <HomePage></HomePage>
+                <NiceName>Rei</NiceName>
+                <CommentText><![CDATA[test comment]]></CommentText>
+                <CreateTime><![CDATA[2010-12-03 17:06:55]]></CreateTime>
+                <CommentIp><![CDATA[127.0.0.1]]></CommentIp>
+            </Comment>
+        </Comments>
+    </Log>
+</BlogBusCom>
