@@ -1,9 +1,43 @@
 #!/usr/bin/env ruby
 
-$LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
-
+require 'optparse'
+require 'rubygems'
 require 'blog_converter'
-require 'blog_converter/exec'
 
-converter = BlogConverter::Exec.new ARGV
-converter.run
+output_format = nil
+opts = OptionParser.new do |opts|
+	opts.banner = "Blog Converter: Convert blog archives to each other."
+	opts.define_head "Usage: blog_converter INPUT [OUTPUT] [options]"
+	opts.separator ""
+	opts.separator "Options:"
+
+	opts.on("-f [FORMAT]", "Output format, options: blogbus, wordpress, xml") {|val| output_format = val.to_sym}
+
+	opts.on_tail("-?", "-h", "--help", "Show this message") do
+		puts opts
+		exit
+	end
+end
+opts.parse!
+
+input = ARGV.shift
+output = ARGV.shift
+
+string = File.open(input).read
+output_format ||= :xml
+
+unless [:xml, :wordpress, :xml].include? output_format
+	puts "Unknow format: #{output_format}"
+	exit
+end
+
+puts "parsing..."
+result = BlogConverter.parse(string).export(output_format)
+puts "done."
+
+if output
+	puts "save in #{output}"
+	File.open(output, 'w') {|file| file.write result }
+else
+	puts result
+end
