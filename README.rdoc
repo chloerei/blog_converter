@@ -35,7 +35,7 @@ Blog converter is a tool to convert blog archive file to each other, for example
   # all attribute, see BlogConverter::Article, BlogConverter::Comment
   titles = doc.articles.map {|article| article.title}
   first_article = doc.articles.first
-  first_comment = article.comments.first
+  first_comment = first_article.comments.first
 
 == Uses as command line tool
 
