@@ -1,3 +1,57 @@
-=Blog Converter
+= Blog Converter
+
+Project page:
+http://github.com/chloerei/blog_converter
+
+== Description
 
 Blog converter is a tool to convert blog archive file to each other, for example: blogbus, wordpress, etc.
+
+== Install
+
+  [sudo] gem install blog_converter
+
+== Dependent
+
+* ruby 1.8 or 1.9
+* nokogiri
+
+== Uses as ruby gem
+
+	require 'rubygem' # if ruby1.8
+  require 'blog_converter'
+  
+  # parse a archive file to BlogConverter::Document
+  string = File.open('wordpress.xml').read
+  doc = BlogConverter.parse string
+	
+  # export to different archive format
+  # current option: :wordpress, :blogbus, :xml, default is :xml.
+  wordpress_xml = doc.export :wordpress
+  blogbus_xml   = doc.export :blogbus
+  xml           = doc.export :xml
+	
+	# operate doc.
+	# all attribute, see BlogConverter::Article, BlogConverter::Comment
+	titles = doc.articles.map {|article| article.title}
+	first_article = doc.articles.first
+	first_comment = article.comments.first
+
+== Uses as command line tool
+
+	blog_converter INPUT [OUTPUT] [OPTIONS]
+
+For example:
+
+	blog_converter wordpress.xml blogbus.xml -f blogbus
+	blog_converter blogbus.xml wordpress.xml -f wordpress
+
+Tool help
+
+	blog_converter -h
+
+== License
+
+(The MIT License)
+
+See MIT-LICENSE file.
