@@ -6,15 +6,24 @@ require 'blog_converter'
 
 output_format = nil
 opts = OptionParser.new do |opts|
-	opts.banner = "Blog Converter: Convert blog archives to each other."
-	opts.define_head "Usage: blog_converter INPUT [OUTPUT] [options]"
-	opts.separator ""
-	opts.separator "Options:"
+	opts.banner = <<EOF
+Usage: blog_converter INPUT [OUTPUT] [options]
+
+Description:
+    Convert blog archives to each other, like blogbus, wordpress, etc.
+
+Options:
+EOF
 
 	opts.on("-f [FORMAT]", "Output format, options: blogbus, wordpress, xml") {|val| output_format = val.to_sym}
 
 	opts.on_tail("-?", "-h", "--help", "Show this message") do
 		puts opts
+		exit
+	end
+
+	opts.on_tail("-v", "Show version") do
+		puts BlogConverter.version
 		exit
 	end
 end
@@ -23,13 +32,19 @@ opts.parse!
 input = ARGV.shift
 output = ARGV.shift
 
-string = File.open(input).read
 output_format ||= :xml
 
 unless [:xml, :wordpress, :xml].include? output_format
 	puts "Unknow format: #{output_format}"
 	exit
 end
+
+if input.nil?
+	puts opts
+	exit
+end
+
+string = File.open(input).read
 
 puts "parsing..."
 result = BlogConverter.parse(string).export(output_format)
