@@ -34,7 +34,7 @@ output = ARGV.shift
 
 output_format ||= :xml
 
-unless [:xml, :wordpress, :xml].include? output_format
+unless [:blogbus, :wordpress, :xml].include? output_format
 	puts "Unknow format: #{output_format}"
 	exit
 end

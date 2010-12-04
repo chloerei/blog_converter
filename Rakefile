@@ -12,6 +12,10 @@ namespace :gem do
   task :build => :clean do
     system "gem build blog_converter.gemspec"
   end
+
+  task :install do
+    system "sudo gem install blog_converter -l"
+  end
 end
 
 desc 'Test the paperclip plugin.'
