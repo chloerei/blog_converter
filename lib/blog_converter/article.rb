@@ -3,9 +3,9 @@ module BlogConverter
     attr_accessor :title, :content, :summary, :published_at, :created_at, :author, :comments, :categories, :tags, :status
 
     module Status
-      Publish = :publish
-      Draft   = :draft
-      Hide    = :hide
+      Publish = 'publish'
+      Draft   = 'draft'
+      Hide    = 'hide'
     end
 
     def initialize(params = {})
