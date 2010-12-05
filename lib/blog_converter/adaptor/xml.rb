@@ -6,6 +6,7 @@ module BlogConverter
           xml.document do 
             doc.articles.each do |article|
               xml.article do
+                xml.status       article.status
                 xml.author       article.author
                 xml.title        article.title
                 xml.content      article.content
@@ -39,6 +40,50 @@ module BlogConverter
           end
         end
         builder.to_xml
+      end
+
+      def self.import(string)
+        xml_doc = Nokogiri::XML(string)
+        doc = BlogConverter::Document.new
+        xml_doc.css('document > article').each do |article_item|
+          article = BlogConverter::Article.new
+          %w( title content summary published_at created_at author status ).each do |column|
+            text = article_item.xpath(column).text
+            unless text.empty?
+              if %w( published_at created_at ).include? column
+                article.send("#{column}=", Time.parse(text))
+              else
+                article.send("#{column}=", text)
+              end
+            end
+          end
+
+          article_item.css('categories category').each do |category_item|
+            article.categories << category_item.text
+          end
+
+          article_item.css('tags tag').each do |tag_item|
+            article.categories << tag_item.text
+          end
+
+          article_item.css('comments comment').each do |comment_item|
+            comment = BlogConverter::Comment.new
+            %w( author email url content created_at ip ).each do |column|
+              text = comment_item.css(column).text
+              unless text.empty?
+                if %w( published_at created_at ).include? column
+                  comment.send "#{column}=", Time.parse()
+                else
+                  comment.send "#{column}=", comment_item.css(column).text
+                end
+              end
+            end
+            article.comments << comment
+          end
+
+          doc.articles << article
+        end
+        doc
       end
     end
   end
