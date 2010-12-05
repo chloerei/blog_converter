@@ -7,6 +7,8 @@ require 'blog_converter/importer/wordpress'
 require 'blog_converter/importer/blogbus'
 require 'blog_converter/exporter/wordpress'
 require 'blog_converter/exporter/blogbus'
+require 'blog_converter/adaptor/blogbus'
+require 'blog_converter/adaptor/wordpress'
 
 module BlogConverter
   def self.version
