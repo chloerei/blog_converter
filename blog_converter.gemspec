@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email = "chloerei@gmail.com"
   s.platform = Gem::Platform::RUBY
   s.summary = "An tool to convert blog achive file."
-  s.files = Dir["README*", "Rakefile", "{lib,test}/**/*", "bin/*"]
+  s.files = Dir["README*", "Rakefile", "MIT-LICENSE", "{lib,test}/**/*", "bin/*"]
   s.require_path = "lib"
 	s.executables = ["blog_converter"]
   s.test_files = Dir["test/**/*_test.rb"]
