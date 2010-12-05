@@ -1,9 +1,15 @@
 module BlogConverter
   class Article
-    attr_accessor :title, :content, :summary, :published_at, :created_at, :author, :comments, :categories, :tags
+    attr_accessor :title, :content, :summary, :published_at, :created_at, :author, :comments, :categories, :tags, :status
+
+    module Status
+      Publish = :publish
+      Draft   = :draft
+      Hide    = :hide
+    end
 
     def initialize(params = {})
-      %w( title content summary published_at created_at author categories tags).each do |column|
+      %w( title content summary published_at created_at author categories tags status ).each do |column|
         send("#{column}=", params[column.to_sym])
       end
       @categories ||= []
