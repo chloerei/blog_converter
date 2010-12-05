@@ -3,10 +3,12 @@ module BlogConverter
     module Type
       Wordpress = :wordpress
       Blogbus   = :blogbus
+      Xml       = :xml
     end
 
     AdaptorMapper = {Type::Wordpress => BlogConverter::Adaptor::Wordpress,
-                     Type::Blogbus   => BlogConverter::Adaptor::Blogbus}
+                     Type::Blogbus   => BlogConverter::Adaptor::Blogbus,
+                     Type::Xml       => BlogConverter::Adaptor::Xml}
 
     attr_accessor :articles
     def initialize
@@ -15,12 +17,7 @@ module BlogConverter
 
     def export(exporter = :xml)
       if exporter.is_a? Symbol
-        case exporter
-        when :xml
-          return to_xml
-        else
-          exporter = AdaptorMapper[exporter]
-        end
+        exporter = AdaptorMapper[exporter]
       end
 
       if exporter.respond_to? :export
@@ -31,43 +28,7 @@ module BlogConverter
     end
 
     def to_xml
-      builder = Nokogiri::XML::Builder.new do |xml|
-        xml.document do 
-          self.articles.each do |article|
-            xml.article do
-              xml.author       article.author
-              xml.title        article.title
-              xml.content      article.content
-              xml.summary      article.summary
-              xml.created_at   article.created_at
-              xml.published_at article.published_at
-              xml.tags do
-                article.tags.each do |tag|
-                  xml.tag tag
-                end
-              end
-              xml.categories do
-                article.categories.each do |category|
-                  xml.category category
-                end
-              end
-              xml.comments do
-                article.comments.each do |comment|
-                  xml.comment do
-                    xml.author     comment.author
-                    xml.email      comment.email
-                    xml.url        comment.url
-                    xml.content    comment.content
-                    xml.created_at comment.created_at
-                    xml.ip         comment.ip
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-      builder.to_xml
+      Adaptor::Xml.export self
     end
 
     def self.parse(string, importer = nil)
