@@ -8,9 +8,10 @@ module BlogConverter
                       'xmlns:dc' => "http://purl.org/dc/elements/1.1/",
                       'xmlns:wp' => "http://wordpress.org/export/1.0/"}
 
-      ArticleStatusExportMapper = {BlogConverter::Article::Status::Hide    => 'pending',
-                                   BlogConverter::Article::Status::Publish => 'publish',
-                                   BlogConverter::Article::Status::Draft   => 'draft'}
+      ArticleStatusExportMapper = {BlogConverter::Article::Status::Publish => 'publish',
+                                   BlogConverter::Article::Status::Draft   => 'draft',
+                                   BlogConverter::Article::Status::Hide    => 'pending',
+                                   BlogConverter::Article::Status::Top     => 'publish'}
 
       def self.export(doc)
         builder = Nokogiri::XML::Builder.new do |xml|

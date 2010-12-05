@@ -5,8 +5,9 @@ module BlogConverter
               :SchemaVersion => '1.1',
               :Creator => 'BlogConverter'}
 
-      ArticleStatusExportMapper = {BlogConverter::Article::Status::Hide    => 0,
-                                   BlogConverter::Article::Status::Publish => 1,
+      ArticleStatusExportMapper = {BlogConverter::Article::Status::Publish => 1,
+                                   BlogConverter::Article::Status::Draft   => 0,
+                                   BlogConverter::Article::Status::Hide    => 0,
                                    BlogConverter::Article::Status::Top     => 2}
 
       def self.export(doc)
