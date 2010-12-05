@@ -1,11 +1,15 @@
 require './test/helper.rb'
 
 class AdaptorWordpressTest < Test::Unit::TestCase
+  def setup
+    @adaptor =BlogConverter::Adaptor::Wordpress.new
+  end
+
   def test_export
     @wordpress_xml = File.open('./test/fixtures/wordpress.xml').read
-    @doc = BlogConverter::Adaptor::Wordpress.import @wordpress_xml
-    @xml = BlogConverter::Adaptor::Wordpress.export @doc
-    @new_doc = BlogConverter::Adaptor::Wordpress.import @xml
+    @doc = @adaptor.import @wordpress_xml
+    @xml = @adaptor.export @doc
+    @new_doc = @adaptor.import @xml
     assert_equal @doc.articles.count, @new_doc.articles.count
     assert_equal @doc.articles.first.status, @new_doc.articles.first.status
     assert_equal @doc.articles.first.categories, @new_doc.articles.first.categories
@@ -16,7 +20,7 @@ class AdaptorWordpressTest < Test::Unit::TestCase
   def test_import
     @wordpress_xml = File.open('./test/fixtures/wordpress.xml').read
 
-    doc = BlogConverter::Adaptor::Wordpress.import @wordpress_xml
+    doc = @adaptor.import @wordpress_xml
     assert_equal BlogConverter::Document, doc.class
 
     assert_equal 1, doc.articles.count

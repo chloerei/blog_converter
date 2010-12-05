@@ -1,7 +1,7 @@
 module BlogConverter
   module Adaptor
     class Xml
-      def self.export(doc)
+      def export(doc)
         builder = Nokogiri::XML::Builder.new do |xml|
           xml.document do 
             doc.articles.each do |article|
@@ -42,7 +42,7 @@ module BlogConverter
         builder.to_xml
       end
 
-      def self.import(string)
+      def import(string)
         xml_doc = Nokogiri::XML(string)
         doc = BlogConverter::Document.new
         xml_doc.css('document > article').each do |article_item|

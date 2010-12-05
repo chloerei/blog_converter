@@ -13,7 +13,7 @@ module BlogConverter
                                    BlogConverter::Article::Status::Hide    => 'pending',
                                    BlogConverter::Article::Status::Top     => 'publish'}
 
-      def self.export(doc)
+      def export(doc)
         builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
           xml.rss(RSS_ATTRIBUTES) do
             doc.articles.each do |article|
@@ -59,7 +59,7 @@ module BlogConverter
                                    'draft'   => BlogConverter::Article::Status::Draft,
                                    'auto-draft'   => BlogConverter::Article::Status::Draft}
 
-      def self.import(xml)
+      def import(xml)
         doc = Document.new
         xml_doc = Nokogiri::XML(xml)
         xml_doc.css('rss > channel > item').each do |item|

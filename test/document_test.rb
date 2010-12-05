@@ -22,7 +22,7 @@ class DocumentTest < Test::Unit::TestCase
     assert_not_nil doc.export :blogbus
     assert_nil doc.export :undefined
 
-    assert_not_nil doc.export(BlogConverter::Adaptor::Wordpress)
+    assert_not_nil doc.export(BlogConverter::Adaptor::Wordpress.new)
     assert_not_nil doc.export(:wordpress)
     assert_nil doc.export(:unknow)
   end

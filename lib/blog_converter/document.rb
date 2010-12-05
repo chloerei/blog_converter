@@ -17,7 +17,8 @@ module BlogConverter
 
     def export(exporter = :xml)
       if exporter.is_a? Symbol
-        exporter = AdaptorMapper[exporter]
+        klass = AdaptorMapper[exporter]
+        exporter = klass.new if klass.is_a? Class
       end
 
       if exporter.respond_to? :export
@@ -28,14 +29,15 @@ module BlogConverter
     end
 
     def to_xml
-      Adaptor::Xml.export self
+      Adaptor::Xml.new.export self
     end
 
     def self.parse(string, importer = nil)
       importer ||= check_type(string)
 
       if importer.is_a? Symbol
-        importer = AdaptorMapper[importer]
+        klass = AdaptorMapper[importer]
+        importer = klass.new 
       end
 
       if importer.respond_to? :export

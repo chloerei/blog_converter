@@ -7,11 +7,12 @@ class AdaptorXmlTest < Test::Unit::TestCase
     @comment = BlogConverter::Comment.new :author => 'Rei', :content => 'test'
     @article.comments << @comment
     @doc.articles << @article
+    @adaptor =BlogConverter::Adaptor::Xml.new
   end
 
   def test_export_and_import
-    xml = BlogConverter::Adaptor::Xml.export @doc
-    @new_doc = BlogConverter::Adaptor::Xml.import xml
+    xml = @adaptor.export @doc
+    @new_doc = @adaptor.import xml
     assert_equal @doc.to_xml, @new_doc.to_xml
   end
 end

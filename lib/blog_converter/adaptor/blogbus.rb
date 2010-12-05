@@ -10,7 +10,7 @@ module BlogConverter
                                    BlogConverter::Article::Status::Hide    => 0,
                                    BlogConverter::Article::Status::Top     => 2}
 
-      def self.export(doc)
+      def export(doc)
         builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
           xml.BlogBusCom(Meta) do
             doc.articles.each do |article|
@@ -46,7 +46,7 @@ module BlogConverter
                                    1 => BlogConverter::Article::Status::Publish,
                                    2 => BlogConverter::Article::Status::Top}
 
-      def self.import(string)
+      def import(string)
         doc = Document.new
         xml_doc = Nokogiri::XML(string)
         xml_doc.css('BlogBusCom > Log').each do |log|

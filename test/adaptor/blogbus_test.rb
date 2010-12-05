@@ -1,11 +1,15 @@
 require './test/helper.rb'
 
 class AdaptorBlogbusTest < Test::Unit::TestCase
+  def setup
+    @adaptor =BlogConverter::Adaptor::Blogbus.new
+  end
+
   def test_export
     @blogbus_xml = File.open('./test/fixtures/blogbus.xml').read
-    @doc = BlogConverter::Adaptor::Blogbus.import @blogbus_xml
-    @xml = BlogConverter::Adaptor::Blogbus.export @doc
-    @new_doc = BlogConverter::Adaptor::Blogbus.import @xml
+    @doc = @adaptor.import @blogbus_xml
+    @xml = @adaptor.export @doc
+    @new_doc = @adaptor.import @xml
     assert_equal @doc.articles.count, @new_doc.articles.count
     assert_equal @doc.articles.first.status, @new_doc.articles.first.status
     assert_equal @doc.articles.first.categories, @new_doc.articles.first.categories
@@ -15,7 +19,7 @@ class AdaptorBlogbusTest < Test::Unit::TestCase
 
   def test_import
     @blogbus_xml = File.open('./test/fixtures/blogbus.xml').read
-    doc = BlogConverter::Adaptor::Blogbus.import @blogbus_xml
+    doc = @adaptor.import @blogbus_xml
     assert_equal BlogConverter::Document, doc.class
     assert_equal 1, doc.articles.count
     article = doc.articles.first
