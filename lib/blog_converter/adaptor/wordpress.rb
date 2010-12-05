@@ -8,6 +8,10 @@ module BlogConverter
                       'xmlns:dc' => "http://purl.org/dc/elements/1.1/",
                       'xmlns:wp' => "http://wordpress.org/export/1.0/"}
 
+      ArticleStatusExportMapper = {BlogConverter::Article::Status::Hide    => 'pending',
+                                   BlogConverter::Article::Status::Publish => 'publish',
+                                   BlogConverter::Article::Status::Draft   => 'draft'}
+
       def self.export(doc)
         builder = Nokogiri::XML::Builder.new do |xml|
           xml.rss(RSS_ATTRIBUTES) do
@@ -20,7 +24,7 @@ module BlogConverter
                   xml['content'].encoded article.content
                   xml['wp'].post_date    article.created_at
                   xml['wp'].post_type    'post'
-                  xml['wp'].status       'publish'
+                  xml['wp'].status       ArticleStatusExportMapper[article.status]
 
                   article.categories.each do |category|
                     xml.category category, :domain => 'category'
@@ -48,17 +52,23 @@ module BlogConverter
         builder.to_xml
       end
 
+      ArticleStatusImportMapper = {'pending' => BlogConverter::Article::Status::Hide,
+                                   'publish' => BlogConverter::Article::Status::Publish,
+                                   'draft'   => BlogConverter::Article::Status::Draft,
+                                   'auto-draft'   => BlogConverter::Article::Status::Draft}
+
       def self.import(xml)
         doc = Document.new
         xml_doc = Nokogiri::XML(xml)
         xml_doc.css('rss > channel > item').each do |item|
           if item.xpath('wp:post_type').text == 'post'
-            article = Article.new(:title        => item.xpath('title').text,
+            article = Article.new :title        => item.xpath('title').text,
                                   :author       => item.xpath('dc:creator').text,
                                   :content      => item.xpath('content:encoded').text,
                                   :summary      => item.xpath('excerpt:encoded').text,
                                   :created_at   => Time.parse(item.xpath('wp:post_date').text),
-                                  :published_at => Time.parse(item.xpath('pubDate').text) )
+                                  :published_at => Time.parse(item.xpath('pubDate').text),
+                                  :status       => ArticleStatusImportMapper[item.xpath('wp:status').text]
 
             item.xpath("category[@domain='category']").each do |category|
               article.categories << category.text
