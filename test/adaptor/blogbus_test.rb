@@ -7,6 +7,7 @@ class AdaptorBlogbusTest < Test::Unit::TestCase
     @xml = BlogConverter::Adaptor::Blogbus.export @doc
     @new_doc = BlogConverter::Adaptor::Blogbus.import @xml
     assert_equal @doc.articles.count, @new_doc.articles.count
+    assert_equal @doc.articles.first.status, @new_doc.articles.first.status
     assert_equal @doc.articles.first.categories, @new_doc.articles.first.categories
     assert_equal @doc.articles.first.tags, @new_doc.articles.first.tags
     assert_equal @doc.articles.first.comments.count, @new_doc.articles.first.comments.count
@@ -19,6 +20,7 @@ class AdaptorBlogbusTest < Test::Unit::TestCase
     assert_equal 1, doc.articles.count
     article = doc.articles.first
     assert_equal 'title', article.title
+    assert_equal BlogConverter::Article::Status::Publish, article.status
     assert_equal '', article.author
     assert_equal '<p>test content</p>', article.content
     assert_equal '<p>test content</p>', article.summary

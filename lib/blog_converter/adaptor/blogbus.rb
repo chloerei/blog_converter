@@ -5,12 +5,16 @@ module BlogConverter
               :SchemaVersion => '1.1',
               :Creator => 'BlogConverter'}
 
+      ArticleStatusExportMapper = {BlogConverter::Article::Status::Hide    => 0,
+                                   BlogConverter::Article::Status::Publish => 1,
+                                   BlogConverter::Article::Status::Top     => 2}
+
       def self.export(doc)
         builder = Nokogiri::XML::Builder.new do |xml|
           xml.BlogBusCom(Meta) do
             doc.articles.each do |article|
               xml.Log do
-                xml.Status  1
+                xml.Status  ArticleStatusExportMapper[article.status]
                 xml.Title   article.title
                 xml.Writer  article.author
                 xml.LogDate article.created_at
@@ -37,11 +41,16 @@ module BlogConverter
         builder.to_xml
       end
 
+      ArticleStatusImportMapper = {0 => BlogConverter::Article::Status::Hide,
+                                   1 => BlogConverter::Article::Status::Publish,
+                                   2 => BlogConverter::Article::Status::Top}
+
       def self.import(string)
         doc = Document.new
         xml_doc = Nokogiri::XML(string)
         xml_doc.css('BlogBusCom > Log').each do |log|
           article = Article.new :title        => log.xpath('Title').text,
+                                :status       => ArticleStatusImportMapper[log.xpath('Status').text.to_i],
                                 :content      => log.xpath('Content').text,
                                 :summary      => log.xpath('Excerpt').text,
                                 :author       => log.xpath('Writer').text,

@@ -6,6 +6,7 @@ module BlogConverter
       Publish = 'publish'
       Draft   = 'draft'
       Hide    = 'hide'
+      Top     = 'top'
     end
 
     def initialize(params = {})

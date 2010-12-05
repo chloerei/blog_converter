@@ -7,15 +7,13 @@ require 'blog_converter'
 desc 'Default: run unit tests.'
 task :default => [:test]
 
-namespace :gem do
-  desc 'Build gem'
-  task :build => :clean do
-    system "gem build blog_converter.gemspec"
-  end
+desc 'Build gem'
+task :build => :clean do
+  system "gem build blog_converter.gemspec"
+end
 
-  task :install do
-    system "sudo gem install blog_converter -l"
-  end
+task :install => :build do
+  system "sudo gem install blog_converter -l"
 end
 
 desc 'Test the paperclip plugin.'
