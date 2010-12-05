@@ -14,32 +14,33 @@ module BlogConverter
                                    BlogConverter::Article::Status::Top     => 'publish'}
 
       def self.export(doc)
-        builder = Nokogiri::XML::Builder.new do |xml|
+        builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
           xml.rss(RSS_ATTRIBUTES) do
             doc.articles.each do |article|
               xml.channel do
                 xml.item do
                   xml.title              article.title
                   xml.pubDate            article.published_at.rfc2822
-                  xml['dc'].creator      article.author
-                  xml['content'].encoded article.content
+                  xml['dc'].creator      {|xml| xml.cdata article.author}
+                  xml['content'].encoded {|xml| xml.cdata article.content}
+                  xml['excerpt'].encoded {|xml| xml.cdata article.summary}
                   xml['wp'].post_date    article.created_at
                   xml['wp'].post_type    'post'
                   xml['wp'].status       ArticleStatusExportMapper[article.status]
 
                   article.categories.each do |category|
-                    xml.category category, :domain => 'category'
+                    xml.category(:domain => 'category') {|xml| xml.cdata category}
                   end
                   article.tags.each do |tag|
-                    xml.category tag, :domain => 'tag'
+                    xml.category(:domain => 'tag') {|xml| xml.cdata tag}
                   end
 
                   article.comments.each do |comment|
                     xml['wp'].comment do
-                      xml['wp'].comment_author      comment.author
+                      xml['wp'].comment_author      {|xml| xml.cdata comment.author}
                       xml['wp'].comment_email       comment.email
                       xml['wp'].comment_url         comment.url
-                      xml['wp'].comment_content     comment.content
+                      xml['wp'].comment_content     {|xml| xml.cdata comment.content}
                       xml['wp'].comment_date        comment.created_at
                       xml['wp'].comment_author_IP   comment.ip
                       xml['wp'].comment_approved 1
