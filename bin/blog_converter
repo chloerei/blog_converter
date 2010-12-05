@@ -23,7 +23,7 @@ EOF
 	end
 
 	opts.on_tail("-v", "Show version") do
-		puts BlogConverter.version
+		puts BlogConverter::VERSION
 		exit
 	end
 end

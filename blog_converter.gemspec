@@ -1,9 +1,9 @@
 require 'rubygems'
-require './lib/blog_converter'
+require './lib/blog_converter/version'
 
 Gem::Specification.new do |s|
   s.name    = "blog_converter"
-  s.version = BlogConverter.version
+  s.version = BlogConverter::VERSION
   s.author  = "Rei"
   s.homepage = 'https://github.com/chloerei/blog_converter'
   s.email = "chloerei@gmail.com"

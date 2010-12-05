@@ -5,6 +5,9 @@ module BlogConverter
       Blogbus   = :blogbus
     end
 
+    AdaptorMapper = {Type::Wordpress => BlogConverter::Adaptor::Wordpress,
+                     Type::Blogbus   => BlogConverter::Adaptor::Blogbus}
+
     attr_accessor :articles
     def initialize
       @articles = []
@@ -14,15 +17,13 @@ module BlogConverter
       if exporter.is_a? Symbol
         case exporter
         when :xml
-          to_xml
-        when Type::Wordpress
-          Exporter::Wordpress.export self
-        when Type::Blogbus
-          Exporter::Blogbus.export self
+          return to_xml
         else
-          nil
+          exporter = AdaptorMapper[exporter]
         end
-      elsif exporter.respond_to? :export
+      end
+
+      if exporter.respond_to? :export
         exporter.export self
       else
         nil
@@ -70,15 +71,17 @@ module BlogConverter
     end
 
     def self.parse(string, importer = nil)
-      importer ||= case check_type(string)
-                   when Type::Wordpress
-                     Importer::Wordpress
-                   when Type::Blogbus
-                     Importer::Blogbus
-                   else
-                     return nil
-                   end
-      importer.import string
+      importer ||= check_type(string)
+
+      if importer.is_a? Symbol
+        importer = AdaptorMapper[importer]
+      end
+
+      if importer.respond_to? :export
+        importer.import string 
+      else
+        nil
+      end
     end
 
     private
