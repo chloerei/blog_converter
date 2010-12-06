@@ -143,7 +143,7 @@ module BlogConverter
         string.gsub!(Regexp.new('<p>\s*(</?' + allblocks + '[^>]*>)')) {|s| $1} 
         string.gsub!(Regexp.new('(</?' + allblocks + '[^>]*>)\s*</p>')) {|s| $1}
         if br
-          string.gsub!(/<(script|style).*?<\/\\1>/s) {|s| s.gusb "\n", "WPPreserveNewline />" }
+          string.gsub!(/<(script|style).*?<\/\\1>/m) {|s| s.gusb "\n", "WPPreserveNewline />" }
           string.gsub!(%r|(?<!<br />)\s*\n|, "<br />\n") # optionally make line breaks
           string.gsub!('<WPPreserveNewline />', "\n")
         end

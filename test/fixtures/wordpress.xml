@@ -48,7 +48,7 @@
 
             <guid isPermaLink="false"></guid>
             <description></description>
-            <content:encoded><![CDATA[Welcome to <a href="http://blog.chloerei.com/">Blog.chloerei.com</a>. This is your first post. Edit or delete it, then start blogging!]]></content:encoded>
+            <content:encoded><![CDATA[Welcome to <a href="http://blog.chloerei.com/">Blog.chloerei.com</a>. This is your first post. Edit or delete it, then start blogging!测试]]></content:encoded>
             <excerpt:encoded><![CDATA[]]></excerpt:encoded>
             <wp:post_id>1</wp:post_id>
             <wp:post_date>2010-03-25 07:36:11</wp:post_date>
