@@ -18,7 +18,7 @@ module BlogConverter
                 xml.Status  ArticleStatusExportMapper[article.status]
                 xml.Title   article.title
                 xml.Writer  article.author
-                xml.LogDate article.created_at
+                xml.LogDate article.created_at.strftime("%Y-%m-%d %H:%M:%S")
                 xml.Content {|xml| xml.cdata article.content}
                 xml.Excerpt {|xml| xml.cdata article.summary}
                 xml.Sort    article.categories.join(' ')
@@ -30,7 +30,7 @@ module BlogConverter
                       xml.HomePage    comment.url
                       xml.NiceName    comment.author
                       xml.CommentText {|xml| xml.cdata comment.content}
-                      xml.CreateTime  {|xml| xml.cdata comment.created_at}
+                      xml.CreateTime  {|xml| xml.cdata comment.created_at.strftime("%Y-%m-%d %H:%M:%S")}
                       xml.CommentIp   {|xml| xml.cdata comment.ip}
                     end
                   end
