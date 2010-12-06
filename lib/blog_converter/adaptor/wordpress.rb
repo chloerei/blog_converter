@@ -117,8 +117,8 @@ module BlogConverter
         string.gsub!(%r|<br />\s*<br />|, "\n\n")
         # Space things out a little
         allblocks = '(?:table|thead|tfoot|caption|col|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre|select|option|form|map|area|blockquote|address|math|style|input|p|h[1-6]|hr|fieldset|legend|section|article|aside|hgroup|header|footer|nav|figure|figcaption|details|menu|summary)'
-        string.gsub!(Regexp.new('<' + allblocks + '[^>]*>')) {|s| "\n#{s}"}
-        string.gsub!(Regexp.new('</' + allblocks + '>')) {|s| "#{s}\n\n"}
+        string.gsub!(Regexp.new('(<' + allblocks + '[^>]*>)')) {|s| "\n#{s}"}
+        string.gsub!(Regexp.new('(</' + allblocks + '>)')) {|s| "#{s}\n\n"}
         # cross-platform newlines
         string.gsub!("\r\n", "\n")
         string.gsub!("\r", "\n")

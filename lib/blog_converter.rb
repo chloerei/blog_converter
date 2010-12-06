@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'nokogiri'
 require 'time'
 require 'blog_converter/version'
