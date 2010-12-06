@@ -144,7 +144,8 @@ module BlogConverter
         string.gsub!(Regexp.new('(</?' + allblocks + '[^>]*>)\s*</p>')) {|s| $1}
         if br
           string.gsub!(/<(script|style).*?<\/\\1>/m) {|s| s.gusb "\n", "WPPreserveNewline />" }
-          string.gsub!(%r|(?<!<br />)\s*\n|, "<br />\n") # optionally make line breaks
+          string.gsub!(%r|(<br />)?\s*\n|, "<br />\n") # optionally make line breaks
+          #string.gsub!(%r|(?<!<br />)\s*\n|, "<br />\n") # original pattern, but ruby1.8 no support
           string.gsub!('<WPPreserveNewline />', "\n")
         end
         string.gsub!(Regexp.new('(</?' + allblocks + '[^>]*>)\s*<br />')) {|s| $1}
