@@ -13,6 +13,12 @@ module BlogConverter
                                    BlogConverter::Article::Status::Hide    => 'pending',
                                    BlogConverter::Article::Status::Top     => 'publish'}
 
+      attr_accessor :wpautop
+
+      def initialize(options = {})
+        @wpautop = options[:wpautop] || true
+      end
+
       def export(doc)
         builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
           xml.rss(RSS_ATTRIBUTES) do
@@ -66,8 +72,8 @@ module BlogConverter
           if item.xpath('wp:post_type').text == 'post'
             article = Article.new :title        => item.xpath('title').text,
                                   :author       => item.xpath('dc:creator').text,
-                                  :content      => item.xpath('content:encoded').text,
-                                  :summary      => item.xpath('excerpt:encoded').text,
+                                  :content      => wpautop_filter(item.xpath('content:encoded').text),
+                                  :excerpt      => wpautop_filter(item.xpath('excerpt:encoded').text),
                                   :created_at   => Time.parse(item.xpath('wp:post_date').text),
                                   :published_at => Time.parse(item.xpath('pubDate').text),
                                   :status       => ArticleStatusImportMapper[item.xpath('wp:status').text]
@@ -83,8 +89,8 @@ module BlogConverter
             item.xpath("wp:comment").each do |comment_item|
               comment = Comment.new :author     => comment_item.xpath('wp:comment_author').text,
                                     :email      => comment_item.xpath('wp:comment_author_email').text,
+                                    :content    => wpautop_filter(comment_item.xpath('wp:comment_content').text),
                                     :url        => comment_item.xpath('wp:comment_author_url').text,
-                                    :content    => comment_item.xpath('wp:comment_content').text,
                                     :created_at => Time.parse(comment_item.xpath('wp:comment_date').text),
                                     :ip         => comment_item.xpath('wp:comment_author_IP').text
               article.comments << comment
@@ -95,6 +101,68 @@ module BlogConverter
         end
         doc
       end
+
+      def wpautop?
+        wpautop
+      end
+
+      # rewrite function wpautop() in wordpress3.0.2 wp-inlcudes/formatting.php
+      def wpautop_filter(string, br = true)
+        return string if !wpautop?
+
+        string.strip!
+        return if string.empty?
+
+        string << "\n" # just to make things a little easier, pad the end
+        string.gsub!(%r|<br />\s*<br />|, "\n\n")
+        # Space things out a little
+        allblocks = '(?:table|thead|tfoot|caption|col|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre|select|option|form|map|area|blockquote|address|math|style|input|p|h[1-6]|hr|fieldset|legend|section|article|aside|hgroup|header|footer|nav|figure|figcaption|details|menu|summary)'
+        string.gsub!(Regexp.new('<' + allblocks + '[^>]*>')) {|s| "\n#{s}"}
+        string.gsub!(Regexp.new('</' + allblocks + '>')) {|s| "#{s}\n\n"}
+        # cross-platform newlines
+        string.gsub!("\r\n", "\n")
+        string.gsub!("\r", "\n")
+        if (string.include? '<object')
+          # no pee inside object/embed
+          string.gsub!(/\s*<param([^>]*)>\s*/) {|s| "<param#{$1}>"}
+          string.gsub!(/\s*<\/embed>\s*/, '</embed>')
+        end
+        string.gsub!(/\n\n+/, "\n\n") # take care of duplicates
+        # make paragraphs, including one at the end
+        pees = string.split(/\n\s*\n/)
+        string = ''
+        pees.each do |pee|
+          string << "<p>" + pee.strip + "</p>\n"
+        end
+        string.gsub!(/<p>\s*<\/p>/, "") # under certain strange conditions it could create a p of entirely whitespace
+        string.gsub!(%r!<p>([^<]+)</(div|address|form)>!) {|s| "<p>#{$1}</p></#{$2}>"}
+        string.gsub!(Regexp.new('<p>\s*(</?' + allblocks  + '[^>]*)\s*</p>')) {|s| $1} # don't pee all over a tag
+        string.gsub!(%r|<p>(<li.+?)</p>|) {|s| $1} # problem with nested lists
+        string.gsub!(%r|<p><blockquote([^>]*)>|) {|s| "<blockquote#{$1}><p>"}
+        string.gsub!(%r|</blockquote></p>|, "<p><blockquote>")
+        string.gsub!(Regexp.new('<p>\s*(</?' + allblocks + '[^>]*>)')) {|s| $1} 
+        string.gsub!(Regexp.new('(</?' + allblocks + '[^>]*>)\s*</p>')) {|s| $1}
+        if br
+          string.gsub!(/<(script|style).*?<\/\\1>/s) {|s| s.gusb "\n", "WPPreserveNewline />" }
+          string.gsub!(%r|(?<!<br />)\s*\n|, "<br />\n") # optionally make line breaks
+          string.gsub!('<WPPreserveNewline />', "\n")
+        end
+        string.gsub!(Regexp.new('(</?' + allblocks + '[^>]*>)\s*<br />')) {|s| $1}
+        string.gsub!(%r!<br />(\s*</?(?:p|li|div|dl|dd|dt|th|pre|td|ul|ol)[^>]*>)!) {|s| $1}
+        if string.include?('<pre')
+          # clean_pre
+          string.gsub!(%r!(<pre[^>]*>)(.*?)</pre>!im) do |s|
+            s.gsub! '<br />', ''
+            s.gsub! '<p>', "\n"
+            s.gsub! '</p>', ''
+            s
+          end
+        end
+        string.gsub!(%r|\n</p>$|, '</p')
+
+        string
+      end
+
     end
   end
 end

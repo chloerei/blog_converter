@@ -28,7 +28,7 @@ class AdaptorWordpressTest < Test::Unit::TestCase
     assert_equal BlogConverter::Article::Status::Publish, article.status
     assert_equal 'Hello world!', article.title
     assert_equal 'Rei', article.author
-    assert_equal 'Welcome to <a href="http://blog.chloerei.com/">Blog.chloerei.com</a>. This is your first post. Edit or delete it, then start blogging!', article.content
+    assert_equal @adaptor.wpautop_filter('Welcome to <a href="http://blog.chloerei.com/">Blog.chloerei.com</a>. This is your first post. Edit or delete it, then start blogging!'), article.content
     assert_equal Time, article.created_at.class
     assert_equal Time, article.published_at.class
     assert_equal 'Uncategorized', article.categories.first
@@ -38,6 +38,17 @@ class AdaptorWordpressTest < Test::Unit::TestCase
     assert_equal '', comment.email
     assert_equal 'http://test.domain/', comment.url
     assert_equal Time, comment.created_at.class
-    assert_equal 'This is an example of a WordPress comment', comment.content
+    assert_equal @adaptor.wpautop_filter('This is an example of a WordPress comment'), comment.content
+  end
+
+  def test_wpautop_filter
+    assert_equal "", @adaptor.wpautop_filter('<br /><br />')
+    assert_equal "<table></table>\n", @adaptor.wpautop_filter('<table></table>')
+    assert_equal "<p>a<br />\na</p>\n", @adaptor.wpautop_filter("a\ra")
+    assert_equal "<p><object><param url='test' /></object></p>\n", @adaptor.wpautop_filter("<object> <param url='test' /></object>")
+    assert_equal "<p></embed></p>\n", @adaptor.wpautop_filter(" </embed> ")
+    assert_equal "<p>a</p>\n<p>a</p>\n", @adaptor.wpautop_filter("a\n\n\na")
+    assert_equal "<pre>\n\n</pre>\n", @adaptor.wpautop_filter("<pre><p></p><br /></pre>")
+
   end
 end
